@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Service Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1 id="home">Emergency Service Management System</h1>
+  <nav>
+  <a href="#home">Home</a>
+<a href="#services">Services</a>
+<a href="#report">Report Emergency</a>
+</nav>
+
+  <h2>Need Emergency Help?</h2>
+  <p>Report your emergency quickly. We are here to help.</p>
+
+  <h2 id="services">Emergency Services</h2>
+
+  <h3>🚓 Police</h3>
+  <p>Call: 100</p>
+
+  <h3>🚑 Ambulance</h3>
+  <p>Call: 108</p>
+
+  <h3>🚒 Fire Brigade</h3>
+  <p>Call: 101</p>
+
+  <h2 id="report">Report an Emergency</h2>
+
+  <form onsubmit="showMessage(event)">
+    <label>Your Name:</label><br>
+    <input type="text" placeholder="Enter your name"><br><br>
+
+    <label>Mobile Number:</label><br>
+    <input type="tel" placeholder="Enter mobile number"><br><br>
+
+    <label>Emergency Type:</label><br>
+    <select>
+      <option>Police</option>
+      <option>Ambulance</option>
+      <option>Fire</option>
+    </select><br><br>
+
+    <label>Location:</label><br>
+    <input type="text" placeholder="Enter location"><br><br>
+
+    <button type="submit">Submit Emergency Report</button>
+  </form>
+  <button type="button" class="view-button" onclick="showReports()">
+  View Saved Reports
+</button>
+
+<div id="reports"></div>
+<script>
+  function showMessage(event) {
+    event.preventDefault();
+
+    const form = event.target;
+
+    const report = {
+      name: form.querySelector('input[type="text"]').value,
+      phone: form.querySelector('input[type="tel"]').value,
+      emergencyType: form.querySelector('select').value,
+      location: form.querySelectorAll('input[type="text"]')[1].value,
+      status: "Pending",
+      date: new Date().toLocaleString()
+    };
+
+    const reports = JSON.parse(localStorage.getItem("emergencyReports")) || [];
+
+    reports.push(report);
+
+    localStorage.setItem("emergencyReports", JSON.stringify(reports));
+
+    alert("Emergency report saved successfully!");
+    form.reset();
+  }
+  function showReports() {
+  const reports = JSON.parse(localStorage.getItem("emergencyReports")) || [];
+  const reportBox = document.getElementById("reports");
+
+  if (reports.length === 0) {
+    reportBox.innerHTML = "<p>No emergency reports saved yet.</p>";
+    return;
+  }
+
+  let output = "<h2>Saved Emergency Reports</h2>";
+
+  reports.forEach(function(report, index) {
+    output += `
+      <div class="report-card">
+        <h3>Report ${index + 1}</h3>
+        <p><b>Name:</b> ${report.name}</p>
+        <p><b>Phone:</b> ${report.phone}</p>
+        <p><b>Emergency Type:</b> ${report.emergencyType}</p>
+        <p><b>Location:</b> ${report.location}</p>
+        <p><b>Status:</b> ${report.status}</p>
+        <p><b>Date:</b> ${report.date}</p>
+      </div>
+    `;
+  });
+
+  reportBox.innerHTML = output;
+}
+</script>
+
+  }
+  <footer>
+  <p>© 2026 Emergency Service Management System</p>
+  <p>For emergency, call 112</p>
+</footer>
+</script>
+</body>
+</html>
